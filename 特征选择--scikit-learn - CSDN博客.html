@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="canonical" href="https://blog.csdn.net/a1368783069/article/details/52048349"/> 
+    <script type="text/javascript">
+        var username = "a1368783069";
+        var _blogger = username;
+        var blog_address = "https://blog.csdn.net/a1368783069";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = ""; 
+        var fileName = '52048349';
+        var commentscount = 0;
+        var islock = false;
+        window.quickReplyflag = true;
+        var totalFloor = 0;
+        var isBole = false;
+        var isDigg = false;
+        var isExpert = false;
+        var isAdm = false;
+        var baiduKey = "python+selectkbest";
+        var needInsertBaidu = false;
+        var isShowAds = true;
+    </script>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://csdnimg.cn/public/static/css/avatar.css">
+                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/production/main-e6f2ceb3f9.css">
+          <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+
+    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.5.js"></script>
+    <script type="text/javascript" src="https://csdnimg.cn/pubfooter/js/tracking-1.0.2.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://csdnimg.cn/release/phoenix/production/main-61dfa34a27.js"></script>
+
+    <script src="https://dup.baidustatic.com/js/ds.js"></script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <meta name="description" content="特征选择（Feature Selection）:choosing a subset of all the features(the ones more informative)。最终得到的特征选是原来特征的一个子集。
+
+特征选取是机器学习领域非常重要的一个方向。 
+主要有两个功能：
+
+（1）减少特征数量、降维，使模型泛化能力更强，减少过拟合
+
+（2）增强度特征和特征值之间的理解
+
+
+
+
+
+
+
+1," />
+    <meta name="keywords" content="机器学习" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <title>特征选择--scikit-learn - CSDN博客</title>
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+              <script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=python+selectkbest"  type="text/javascript"></script>
+            </head>
+<body>
+<script id="toolbar-tpl-scriptId" prod="download" skin="black" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+<div class="container clearfix">
+  <main>
+    <div style="display:none;">
+      <img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+    </div>
+    <article>
+        <h1 class="csdn_top">特征选择--scikit-learn</h1>
+        <div class="article_bar clearfix">
+            <div class="artical_tag">
+                <span class="original">
+                原创                </span>
+                <span class="time">2016年07月29日 12:28:12</span>
+            </div>
+
+            <ul class="article_tags clearfix csdn-tracking-statistics tracking-click" data-mod="popu_377" >
+                <li class="tit">标签：</li>
+
+<!--          [startarticletags]-->
+                                                            <li><a href="http://so.csdn.net/so/search/s.do?q=机器学习&t=blog" target="_blank">机器学习</a> <span>/</span></li>
+                                    <!--          [endarticletags]-->
+            </ul>
+            <ul class="right_bar">
+                <li><button class="btn-noborder"><i class="icon iconfont icon-read"></i><span class="txt">13019</span></button></li>
+                <li class="edit">
+                    <a class="btn-noborder" href="" >
+                        <i class="icon iconfont icon-bianji"></i><span class="txt">编辑</span>
+                    </a>
+                </li>
+                <li class="del">
+                    <a class="btn-noborder" onclick="javascript:deleteArticle(fileName);return false;">
+                        <i class="icon iconfont icon-shanchu"></i><span class="txt">删除</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="article_content" class="article_content csdn-tracking-statistics tracking-click" data-mod="popu_519" data-dsm="post">
+                            <div class="markdown_views">
+                        <p>特征选择（Feature Selection）:choosing a subset of all the features(the ones more informative)。最终得到的特征选是原来特征的一个子集。</p>
+
+<p>特征选取是机器学习领域非常重要的一个方向。 <br>
+主要有两个功能：</p>
+
+<p>（1）减少特征数量、降维，使模型泛化能力更强，减少过拟合</p>
+
+<p>（2）增强特征和特征值之间的理解</p>
+
+<hr>
+
+<hr>
+
+<h3 id="1-去掉取值变化小的特征removing-features-with-low-variance">1, 去掉取值变化小的特征（Removing features with low variance）</h3>
+
+<p>这应该是最简单的特征选择方法了：假设某特征的特征值只有0和1，并且在所有输入样本中，95%的实例的该特征取值都是1，那就可以认为这个特征作用不大。如果100%都是1，那这个特征就没意义了。当特征值都是离散型变量的时候这种方法才能用，如果是连续型变量，就需要将连续变量离散化之后才能用，而且实际当中，一般不太会有95%以上都取某个值的特征存在，所以这种方法虽然简单但是不太好用。可以把它作为特征选择的预处理，先去掉那些取值变化小的特征，然后再从接下来提到的的特征选择方法中选择合适的进行进一步的特征选择。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">sklearn<span class="hljs-preprocessor">.feature</span>_selection<span class="hljs-preprocessor">.VarianceThreshold</span>(threshold=<span class="hljs-number">0.0</span>)</code></pre>
+
+
+
+<pre class="prettyprint"><code class=" hljs lua">from sklearn.feature_selection import VarianceThreshold
+X = <span class="hljs-string">[[0, 0, 1], [0, 1, 0], [1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 1, 1]]</span>
+sel = VarianceThreshold(threshold=(<span class="hljs-number">.8</span> * (<span class="hljs-number">1</span> - <span class="hljs-number">.8</span>)))
+sel.fit_transform(X)
+＃array(<span class="hljs-string">[[0, 1],
+       [1, 0],
+       [0, 0],
+       [1, 1],
+       [1, 0],
+       [1, 1]]</span>)</code></pre>
+
+<p>第一列的特征被去掉</p>
+
+<hr>
+
+
+
+<h3 id="2-单变量特征选择univariate-feature-selection">2, 单变量特征选择（Univariate feature selection）</h3>
+
+<p>基于单变量统计测试。</p>
+
+<p>单变量特征选择能够对每一个特征进行测试，衡量该特征和响应变量之间的关系，根据得分扔掉不好的特征。对于回归和分类问题可以采用卡方检验等方式对特征进行测试。 <br>
+方法简单，易于运行，易于理解，通常对于理解数据有较好的效果（但对特征优化、提高泛化能力来说不一定有效）；这种方法有许多改进的版本、变种。</p>
+
+<p>因此建议作为特征选择的前处理中的一步。</p>
+
+<pre class="prettyprint"><code class=" hljs lua">sklearn.feature_selection.SelectKBest(score_func=&lt;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f_classif</span>&gt;, <span class="hljs-title">k</span>=10)</span></code></pre>
+
+<p>选择前k个分数较高的特征，去掉其他的特征。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs lua">sklearn.feature_selection.SelectPercentile(score_func=&lt;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f_classif</span>&gt;, <span class="hljs-title">percentile</span>=10)</span></code></pre>
+
+<p>f_regression（单因素线性回归试验）用作回归 <br>
+chi2卡方检验，f_classif（方差分析的F值）等用作分类</p>
+
+<pre class="prettyprint"><code class=" hljs avrasm">from sklearn<span class="hljs-preprocessor">.datasets</span> import load_iris
+from sklearn<span class="hljs-preprocessor">.feature</span>_selection import SelectKBest
+from sklearn<span class="hljs-preprocessor">.feature</span>_selection import chi2
+iris = load_iris()
+<span class="hljs-built_in">X</span>, <span class="hljs-built_in">y</span> = iris<span class="hljs-preprocessor">.data</span>, iris<span class="hljs-preprocessor">.target</span>
+<span class="hljs-built_in">X</span><span class="hljs-preprocessor">.shape</span>
+＃(<span class="hljs-number">150</span>, <span class="hljs-number">4</span>)
+X_new = SelectKBest(chi2, k=<span class="hljs-number">2</span>)<span class="hljs-preprocessor">.fit</span>_transform(<span class="hljs-built_in">X</span>, <span class="hljs-built_in">y</span>)
+X_new<span class="hljs-preprocessor">.shape</span>
+＃(<span class="hljs-number">150</span>, <span class="hljs-number">2</span>)</code></pre>
+
+<p>选择一定百分比的最高的评分的特征。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs lua">sklearn.feature_selection.SelectFpr(score_func=&lt;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f_classif</span>&gt;, <span class="hljs-title">alpha</span>=0.05)</span></code></pre>
+
+<p>根据配置的参选搜索</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs livecodeserver">sklearn.feature_selection.GenericUnivariateSelect(score_func=&lt;<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f_classif</span>&gt;, <span class="hljs-title">mode</span>=<span class="hljs-string">'percentile'</span>, <span class="hljs-title">param</span>=<span class="hljs-title">1e-05</span></span></code></pre>
+
+<hr>
+
+
+
+<h3 id="3递归特征消除recursive-feature-elimination-rfe">3,递归特征消除Recursive feature elimination （RFE）</h3>
+
+<p>递归特征消除的主要思想是反复的构建模型（如SVM或者回归模型）然后选出最好的（或者最差的）的特征（可以根据系数来选），把选出来的特征选择出来，然后在剩余的特征上重复这个过程，直到所有特征都遍历了。这个过程中特征被消除的次序就是特征的排序。因此，这是一种寻找最优特征子集的贪心算法。 <br>
+RFE的稳定性很大程度上取决于在迭代的时候底层用哪种模型。例如，假如RFE采用的普通的回归，没有经过正则化的回归是不稳定的，那么RFE就是不稳定的；假如采用的是Ridge，而用Ridge正则化的回归是稳定的，那么RFE就是稳定的。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-class"><span class="hljs-keyword">class</span> sklearn.feature_selection.<span class="hljs-type">RFECV</span><span class="hljs-container">(<span class="hljs-title">estimator</span>, <span class="hljs-title">step</span>=1, <span class="hljs-title">cv</span>=<span class="hljs-type">None</span>, <span class="hljs-title">scoring</span>=<span class="hljs-type">None</span>, <span class="hljs-title">estimator_params</span>=<span class="hljs-type">None</span>, <span class="hljs-title">verbose</span>=0)</span></span></code></pre>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">from sklearn<span class="hljs-preprocessor">.svm</span> import SVC
+from sklearn<span class="hljs-preprocessor">.datasets</span> import load_digits
+from sklearn<span class="hljs-preprocessor">.feature</span>_selection import RFE
+import matplotlib<span class="hljs-preprocessor">.pyplot</span> as plt
+
+<span class="hljs-preprocessor"># Load the digits dataset</span>
+digits = load_digits()
+<span class="hljs-built_in">X</span> = digits<span class="hljs-preprocessor">.images</span><span class="hljs-preprocessor">.reshape</span>((len(digits<span class="hljs-preprocessor">.images</span>), -<span class="hljs-number">1</span>))
+<span class="hljs-built_in">y</span> = digits<span class="hljs-preprocessor">.target</span>
+
+<span class="hljs-preprocessor"># Create the RFE object and rank each pixel</span>
+svc = SVC(kernel=<span class="hljs-string">"linear"</span>, C=<span class="hljs-number">1</span>)
+rfe = RFE(estimator=svc, n_features_to_select=<span class="hljs-number">1</span>, step=<span class="hljs-number">1</span>)
+rfe<span class="hljs-preprocessor">.fit</span>(<span class="hljs-built_in">X</span>, <span class="hljs-built_in">y</span>)
+ranking = rfe<span class="hljs-preprocessor">.ranking</span>_<span class="hljs-preprocessor">.reshape</span>(digits<span class="hljs-preprocessor">.images</span>[<span class="hljs-number">0</span>]<span class="hljs-preprocessor">.shape</span>)
+
+<span class="hljs-preprocessor"># Plot pixel ranking</span>
+plt<span class="hljs-preprocessor">.matshow</span>(ranking)
+plt<span class="hljs-preprocessor">.colorbar</span>()
+plt<span class="hljs-preprocessor">.title</span>(<span class="hljs-string">"Ranking of pixels with RFE"</span>)
+plt<span class="hljs-preprocessor">.show</span>()</code></pre>
+
+<hr>
+
+
+
+<h3 id="4-feature-selection-using-selectfrommodel">4, Feature selection using SelectFromModel</h3>
+
+<p>SelectFromModel 是一个 meta-transformer，可以和在训练完后有一个coef_ 或者 feature_importances_ 属性的评估器（机器学习算法）一起使用。 <br>
+如果相应的coef_ 或者feature_importances_ 的值小于设置的阀值参数，这些特征可以视为不重要或者删除。除了指定阀值参数外，也可以通过设置一个字符串参数，使用内置的启发式搜索找到夜歌阀值。可以使用的字符串参数包括：“mean”, “median” 以及这两的浮点乘积，例如“0.1*mean”.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs mathematica">sklearn.feature_selection.SelectFromModel(estimator, threshold=<span class="hljs-keyword">None</span>, prefit=<span class="hljs-keyword">False</span>)</code></pre>
+
+<p>与Lasso一起使用，从boston数据集中选择最好的两组特征值。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+<span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> load_boston
+<span class="hljs-keyword">from</span> sklearn.feature_selection <span class="hljs-keyword">import</span> SelectFromModel
+<span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LassoCV
+
+<span class="hljs-comment"># Load the boston dataset.</span>
+boston = load_boston()
+X, y = boston[<span class="hljs-string">'data'</span>], boston[<span class="hljs-string">'target'</span>]
+
+<span class="hljs-comment"># We use the base estimator LassoCV since the L1 norm promotes sparsity of features.</span>
+clf = LassoCV()
+
+<span class="hljs-comment"># Set a minimum threshold of 0.25</span>
+sfm = SelectFromModel(clf, threshold=<span class="hljs-number">0.25</span>)
+sfm.fit(X, y)
+n_features = sfm.transform(X).shape[<span class="hljs-number">1</span>]
+
+<span class="hljs-comment"># Reset the threshold till the number of features equals two.</span>
+<span class="hljs-comment"># Note that the attribute can be set directly instead of repeatedly</span>
+<span class="hljs-comment"># fitting the metatransformer.</span>
+<span class="hljs-keyword">while</span> n_features &gt; <span class="hljs-number">2</span>:
+    sfm.threshold += <span class="hljs-number">0.1</span>
+    X_transform = sfm.transform(X)
+    n_features = X_transform.shape[<span class="hljs-number">1</span>]
+
+<span class="hljs-comment"># Plot the selected two features from X.</span>
+plt.title(
+    <span class="hljs-string">"Features selected from Boston using SelectFromModel with "</span>
+    <span class="hljs-string">"threshold %0.3f."</span> % sfm.threshold)
+feature1 = X_transform[:, <span class="hljs-number">0</span>]
+feature2 = X_transform[:, <span class="hljs-number">1</span>] 
+plt.plot(feature1, feature2, <span class="hljs-string">'r.'</span>)
+plt.xlabel(<span class="hljs-string">"Feature number 1"</span>)
+plt.ylabel(<span class="hljs-string">"Feature number 2"</span>)
+plt.ylim([np.min(feature2), np.max(feature2)])
+plt.show()</code></pre>
+
+<hr>
+
+
+
+<h4 id="41l1-based-feature-selection">4.1,L1-based feature selection</h4>
+
+<p>L1正则化将系数w的l1范数作为惩罚项加到损失函数上，由于正则项非零，这就迫使那些弱的特征所对应的系数变成0。因此L1正则化往往会使学到的模型很稀疏（系数w经常为0），这个特性使得L1正则化成为一种很好的特征选择方法。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">from sklearn<span class="hljs-preprocessor">.svm</span> import LinearSVC
+from sklearn<span class="hljs-preprocessor">.datasets</span> import load_iris
+from sklearn<span class="hljs-preprocessor">.feature</span>_selection import SelectFromModel
+iris = load_iris()
+<span class="hljs-built_in">X</span>, <span class="hljs-built_in">y</span> = iris<span class="hljs-preprocessor">.data</span>, iris<span class="hljs-preprocessor">.target</span>
+<span class="hljs-built_in">X</span><span class="hljs-preprocessor">.shape</span>
+＃(<span class="hljs-number">150</span>, <span class="hljs-number">4</span>)
+lsvc = LinearSVC(C=<span class="hljs-number">0.01</span>, penalty=<span class="hljs-string">"l1"</span>, dual=False)<span class="hljs-preprocessor">.fit</span>(<span class="hljs-built_in">X</span>, <span class="hljs-built_in">y</span>)
+model = SelectFromModel(lsvc, prefit=True)
+X_new = model<span class="hljs-preprocessor">.transform</span>(<span class="hljs-built_in">X</span>)
+X_new<span class="hljs-preprocessor">.shape</span>
+＃(<span class="hljs-number">150</span>, <span class="hljs-number">3</span>)</code></pre>
+
+
+
+<h4 id="42-随机稀疏模型randomized-sparse-models">4.2, 随机稀疏模型Randomized sparse models</h4>
+
+<p>面临一些相互关联的特征是基于L1的稀疏模型的限制，因为模型只选择其中一个特征。为了减少这个问题，可以使用随机特征选择方法，通过打乱设计的矩阵或者子采样的数据并，多次重新估算稀疏模型，并且统计有多少次一个特定的回归量是被选中。</p>
+
+<p>RandomizedLasso使用Lasso实现回归设置</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs mathematica">sklearn.linear_model.RandomizedLasso(alpha=<span class="hljs-string">'aic'</span>, scaling=<span class="hljs-number">0.5</span>, sample_fraction=<span class="hljs-number">0.75</span>, n_resampling=<span class="hljs-number">200</span>, selection_threshold=<span class="hljs-number">0.25</span>, fit_intercept=<span class="hljs-keyword">True</span>, verbose=<span class="hljs-keyword">False</span>, normalize=<span class="hljs-keyword">True</span>, precompute=<span class="hljs-string">'auto'</span>, max_iter=<span class="hljs-number">500</span>, eps=<span class="hljs-number">2.2204460492503131e-16</span>, random_state=<span class="hljs-keyword">None</span>, n_jobs=<span class="hljs-number">1</span>, pre_dispatch=<span class="hljs-string">'3*n_jobs'</span>, memory=Memory(cachedir=<span class="hljs-keyword">None</span>))</code></pre>
+
+<p>RandomizedLogisticRegression 使用逻辑回归 logistic regression，适合分类任务</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs mathematica">sklearn.linear_model.RandomizedLogisticRegression(<span class="hljs-keyword">C</span>=<span class="hljs-number">1</span>, scaling=<span class="hljs-number">0.5</span>, sample_fraction=<span class="hljs-number">0.75</span>, n_resampling=<span class="hljs-number">200</span>, selection_threshold=<span class="hljs-number">0.25</span>, tol=<span class="hljs-number">0.001</span>, fit_intercept=<span class="hljs-keyword">True</span>, verbose=<span class="hljs-keyword">False</span>, normalize=<span class="hljs-keyword">True</span>, random_state=<span class="hljs-keyword">None</span>, n_jobs=<span class="hljs-number">1</span>, pre_dispatch=<span class="hljs-string">'3*n_jobs'</span>, memory=Memory(cachedir=<span class="hljs-keyword">None</span>))</code></pre>
+
+
+
+<h4 id="43-基于树的特征选择tree-based-feature-selection">4.3,  基于树的特征选择Tree-based feature selection</h4>
+
+<p>基于树的评估器 (查看sklearn.tree 模块以及在sklearn.ensemble模块中的树的森林) 可以被用来计算特征的重要性，根据特征的重要性去掉无关紧要的特征 (当配合sklearn.feature_selection.SelectFromModel meta-transformer):</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import SelectFromModel
+iris = load_iris()
+X, y = iris.data, iris.target
+X.shape
+＃(<span class="hljs-number">150</span>, <span class="hljs-number">4</span>)
+clf = ExtraTreesClassifier()
+clf = clf.fit(X, y)
+clf.feature_importances_  
+array([ <span class="hljs-number">0.04</span><span class="hljs-keyword">...</span>,  <span class="hljs-number">0.05</span><span class="hljs-keyword">...</span>,  <span class="hljs-number">0.4</span><span class="hljs-keyword">...</span>,  <span class="hljs-number">0.4</span><span class="hljs-keyword">...</span>])
+model = SelectFromModel(clf, prefit=True)
+X_new = model.transform(X)
+X_new.shape               
+＃(<span class="hljs-number">150</span>, <span class="hljs-number">2</span>)</code></pre>
+
+<hr>
+
+
+
+<h3 id="5-feature-selection-as-part-of-a-pipeline">5,  Feature selection as part of a pipeline</h3>
+
+<p>在进行学习之前，特征选择通常被用作预处理步骤。在scikit-learn中推荐使用的处理的方法是sklearn.pipeline.Pipeline</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">sklearn<span class="hljs-preprocessor">.pipeline</span><span class="hljs-preprocessor">.Pipeline</span>(steps)</code></pre>
+
+<p>Pipeline of transforms with a final estimator. <br>
+Sequentially 应用一个包含 transforms and a final estimator的列表 ，pipeline中间的步骤必须是‘transforms’, 也就是它们必须完成fit 以及transform 方法s. final estimator 仅仅只需要完成 fit方法.</p>
+
+<p>使用pipeline是未来组合多个可以在设置不同参数时进行一起交叉验证的步骤 。因此，它允许设置不同步骤中的参数事使用参数名，这些参数名使用‘__’进行分隔。如下实例中所示：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">from sklearn import svm
+from sklearn.datasets import samples_generator
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_regression
+from sklearn.pipeline import Pipeline
+<span class="hljs-comment"># generate some data to play with</span>
+X, y = samples_generator.make_classification(
+<span class="hljs-keyword">...</span>     n_informative=<span class="hljs-number">5</span>, n_redundant=<span class="hljs-number">0</span>, random_state=<span class="hljs-number">42</span>)
+<span class="hljs-comment"># ANOVA SVM-C</span>
+anova_filter = SelectKBest(f_regression, k=<span class="hljs-number">5</span>)
+clf = svm.SVC(kernel=<span class="hljs-string">'linear'</span>)
+anova_svm = Pipeline([(<span class="hljs-string">'anova'</span>, anova_filter), (<span class="hljs-string">'svc'</span>, clf)])
+<span class="hljs-comment"># You can set the parameters using the names issued</span>
+<span class="hljs-comment"># For instance, fit using a k of 10 in the SelectKBest</span>
+<span class="hljs-comment"># and a parameter 'C' of the svm</span>
+anova_svm.set_params(anova__k=<span class="hljs-number">10</span>, svc__C=<span class="hljs-number">.1</span>).fit(X, y)
+<span class="hljs-keyword">...</span>                                              
+Pipeline(steps=[<span class="hljs-keyword">...</span>])
+prediction = anova_svm.predict(X)
+anova_svm.score(X, y)                        
+<span class="hljs-number">0.77</span><span class="hljs-keyword">...</span>
+ <span class="hljs-comment"># getting the selected features chosen by anova_filter</span>
+anova_svm.named_steps[<span class="hljs-string">'anova'</span>].get_support()
+＃array([ True,  True,  True, False, False,  True, False,  True,  True, True,
+       False, False,  True, False,  True, False, False, False, False,
+       True], dtype=bool)</code></pre>
+
+<p>简单语法示例：</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash">clf = Pipeline([
+  (<span class="hljs-string">'feature_selection'</span>, SelectFromModel(LinearSVC(penalty=<span class="hljs-string">"l1"</span>))),
+  (<span class="hljs-string">'classification'</span>, RandomForestClassifier())
+])
+clf.fit(X, y)</code></pre>
+
+<hr>
+
+<p>参考： <br>
+常用特征选取算法 <br>
+<a href="http://www.cnblogs.com/wymlnn/p/4569437.html">http://www.cnblogs.com/wymlnn/p/4569437.html</a></p>
+
+<p>Feature selection <br>
+<a href="http://scikit-learn.org/stable/modules/feature_selection.html">http://scikit-learn.org/stable/modules/feature_selection.html</a></p>
+
+<p>注：以后继续补充</p>                </div>
+                                                <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/production/markdown_views-68a8aad09e.css" />
+                                    </div>
+    </article>
+      <div class="readall_box csdn-tracking-statistics tracking-click" data-mod="popu_376">
+          <div class="read_more_mask"></div>
+          <a class="btn btn-large btn-gray-fred read_more_btn" target="_self">阅读全文</a>
+      </div>
+      <div class="article_copyright">
+         
+                    版权声明：本文为博主原创文章，未经博主允许不得转载。            https://blog.csdn.net/a1368783069/article/details/52048349              </div>
+      <ul class="article_collect clearfix csdn-tracking-statistics tracking-click"  data-mod="popu_378">
+          <li class="tit">本文已收录于以下专栏：</li>
+<!--          [startarticlecolumns]-->
+                                <!--          [endarticlecolumns]-->
+      </ul>
+      <div class="comment_box clearfix" id="comments">
+          <div id="comment_form">
+              <div id="commentsbmitarear">
+                              </div>
+          </div>
+      </div>
+      <div class="comment_li_outbox">
+          <div id="comment_list"></div>
+      </div>
+
+      <div class="more_comment">
+          <div id="comment_bar" class="trackgin-ad" data-mod="popu_385"></div>
+      </div>
+
+      <!-- <h3 class="recommend_tit" id="related">相关文章推荐</h3> -->
+      <div class="recommend_list clearfix" id="rasss">
+                                          <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/sscc_learning/article/details/73929038"  target="_blank" strategy="BlogCommendFromBaidu_0">
+                    <dd>
+                        <h2>[Sklearn应用5] Feature Selection 特征选择（一） SelectFromModel</h2>
+                        <div class="summary">
+                            此内容在sklearn官网地址： http://scikit-learn.org/stable/modules/feature_selection.html 
+  sklearn版本：0.18.2
+
+...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/B/0/F/3_sscc_learning.jpg" alt="sscc_learning" title="sscc_learning"></li>
+                            <li class="user_name">sscc_learning</li>
+                            <li class="time">2017年06月29日 23:19</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>1807</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/FontThrone/article/details/79064930"  target="_blank" strategy="BlogCommendFromBaidu_1">
+                    <dd>
+                        <h2>Feature selection using SelectFromModel</h2>
+                        <div class="summary">
+                            SelectFromModel
+
+sklearn在Feature selection模块中内置了一个SelectFromModel，该模型可以通过Model本身给出的指标对特征进行选择，其作用与其名字...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/9/5/A/3_fontthrone.jpg" alt="FontThrone" title="FontThrone"></li>
+                            <li class="user_name">FontThrone</li>
+                            <li class="time">2018年01月15日 15:17</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>240</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                          <dl class="">
+            <script>
+            (function() {
+              var s = "_" + Math.random().toString(36).slice(2);
+              document.write('<div id="' + s + '"></div>');
+              (window.slotbydup=window.slotbydup || []).push({
+                id: '4765209',
+                container: s,
+                size: '808,120',
+                display: 'inlay-fix'
+              });
+            })();
+            </script>
+          </dl>
+                                        <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/shixin_0125/article/details/72597808"  target="_blank" strategy="BlogCommendFromBaidu_2">
+                    <dd>
+                        <h2>select模型详解</h2>
+                        <div class="summary">
+                            1.select模型原理
+
+使用select函数检查文件描述符上是否有io事件发生，包括可读，可写以及异常
+ select参数和返回值意义如下：
+int select (
+ IN int nfds, ...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/D/D/B/3_shixin_0125.jpg" alt="shixin_0125" title="shixin_0125"></li>
+                            <li class="user_name">shixin_0125</li>
+                            <li class="time">2017年05月21日 16:42</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>243</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/wuzhongdehua1/article/details/52515849"  target="_blank" strategy="BlogCommendFromBaidu_3">
+                    <dd>
+                        <h2>使用sklearn优雅地进行数据挖掘</h2>
+                        <div class="summary">
+                            目录
+
+1 使用sklearn进行数据挖掘
+　　1.1 数据挖掘的步骤
+　　1.2 数据初貌
+　　1.3 关键技术
+2 并行处理
+　　2.1 整体并行处理
+　　2.2 部分并行处理
+...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/E/6/F/3_wuzhongdehua1.jpg" alt="wuzhongdehua1" title="wuzhongdehua1"></li>
+                            <li class="user_name">wuzhongdehua1</li>
+                            <li class="time">2016年09月12日 18:16</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>3284</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/weiyongle1996/article/details/79137078"  target="_blank" strategy="BlogCommendFromBaidu_4">
+                    <dd>
+                        <h2>特征工程</h2>
+                        <div class="summary">
+                            一、特征工程是什么
+        有这么一句话在业界广泛流传：数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已。那特征工程到底是什么呢？顾名思义，其本质是一项工程活动，目的是最大限度...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/F/4/5/3_weiyongle1996.jpg" alt="weiyongle1996" title="weiyongle1996"></li>
+                            <li class="user_name">weiyongle1996</li>
+                            <li class="time">2018年01月23日 10:50</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>94</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/pcsuite/article/details/6191133"  target="_blank" strategy="BlogCommendFromBaidu_5">
+                    <dd>
+                        <h2>select模型使用例子</h2>
+                        <div class="summary">
+                            在windows平台构建网络应用，必须了解socket I/O模型。windows提供了选择(select)、异步选择(WSAAsyncSelect)、事件选择(WSAEventSelect)、重叠I...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/6/2/6/3_pcsuite.jpg" alt="pcsuite" title="pcsuite"></li>
+                            <li class="user_name">pcsuite</li>
+                            <li class="time">2011年02月17日 11:31</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>3335</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/rui307/article/details/51243796"  target="_blank" strategy="BlogCommendFromBaidu_6">
+                    <dd>
+                        <h2>机器学习中的特征选择</h2>
+                        <div class="summary">
+                            
+首先声明，本人个人观点，仅供交流。
+本人欠专业人士，并不了解显示实践中的特征工程。
+
+
+特征选择是一个重要的数据预处理过程，获得数据之后要先进行特征选择然后再训练模型。主要作用：1、降维 2、去除不...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/9/9/3/3_rui307.jpg" alt="rui307" title="rui307"></li>
+                            <li class="user_name">rui307</li>
+                            <li class="time">2016年04月25日 17:24</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>9900</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/Bryan__/article/details/51607215"  target="_blank" strategy="BlogCommendFromBaidu_7">
+                    <dd>
+                        <h2>结合Scikit-learn介绍几种常用的特征选择方法</h2>
+                        <div class="summary">
+                            特征选择(排序)对于数据科学家、机器学习从业者来说非常重要。好的特征选择能够提升模型的性能，更能帮助我们理解数据的特点、底层结构，这对进一步改善模型、算法都有着重要作用。
+
+特征选择主要有两个功能：
+...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/F/8/0/3_bryan__.jpg" alt="Bryan__" title="Bryan__"></li>
+                            <li class="user_name">Bryan__</li>
+                            <li class="time">2016年06月07日 22:51</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>25241</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/linger2012liu/article/details/47960127"  target="_blank" strategy="BlogCommendFromBaidu_8">
+                    <dd>
+                        <h2>sklearn特征选择和分类模型</h2>
+                        <div class="summary">
+                            sklearn特征选择和分类模型
+
+
+
+数据格式：
+这里，原始特征的输入文件的格式使用libsvm的格式，即每行是label index1:value1 index2:value2这种稀疏矩阵的格式。...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/F/5/6/3_linger2012liu.jpg" alt="linger2012liu" title="linger2012liu"></li>
+                            <li class="user_name">linger2012liu</li>
+                            <li class="time">2015年08月24日 22:18</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>8495</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                                                    <dl class="clearfix csdn-tracking-statistics recommend_article" data-mod="popu_387" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+                <a href="https://blog.csdn.net/kancy110/article/details/72835050"  target="_blank" strategy="BlogCommendFromBaidu_9">
+                    <dd>
+                        <h2>sklearn特征选择类库使用小结</h2>
+                        <div class="summary">
+                            sklearn.feature_selection模块实现了特征选择算法，目前主要包括：单变量特征选择和递归特征消除。该模块的类主要用于特征选择或样本集上降维，提高算法的准确率或者提升在高位数据集上表...                        </div>
+
+                        <ul>
+                            <li class="avatar_img"><img src="https://avatar.csdn.net/A/F/A/3_kancy110.jpg" alt="kancy110" title="kancy110"></li>
+                            <li class="user_name">kancy110</li>
+                            <li class="time">2017年06月01日 20:42</li>
+                            <li class="visited_num"><i class="icon iconfont icon-read"></i><span>403</span></li>
+                        </ul>
+                    </dd>
+                </a>
+            </dl>
+                              </div>
+  </main>
+<aside>
+    <div class="right_box user_info">
+    <dl class="inf_bar clearfix">
+        <dt class="csdn-tracking-statistics tracking-click" data-mod="popu_381">
+                <a href="https://blog.csdn.net/a1368783069" target="_blank">
+                    <img src="https://avatar.csdn.net/9/A/C/3_a1368783069.jpg" class="avatar_pic">
+        </a>
+      </dt><dd>
+            <h3 class="csdn-tracking-statistics tracking-click"  data-mod="popu_380"><a href="https://blog.csdn.net/a1368783069" target="_blank" id="uid">a1368783069</a></h3>
+            <div class="medals" title="">
+                      </div>
+                    </dd>
+    </dl>
+    <div class="inf_number_box clearfix">
+        <dl title="69">
+            <dt>原创</dt>
+            <dd>69</dd>
+        </dl>
+        <dl title="19">
+            <dt>粉丝</dt>
+            <dd id='fan'>19</dd>
+        </dl>
+        <dl title="16">
+            <dt>喜欢</dt>
+            <dd>16</dd>
+        </dl>
+        <dl title="7">
+          <dt>评论</dt>
+          <dd>7</dd>
+        </dl>
+    </div>
+
+</div>
+<div class="interflow clearfix">
+      <div class="grade gradeAndbadge gradewidths">
+      <span>等级：</span>
+      <div>
+        <a href="https://blog.csdn.net/home/help.html#level" title="3级,点击查看等级说明" target="_blank">
+          <img class="grade-img" src="https://csdnimg.cn/jifen/images/xunzhang/jianzhang/blog3.png" alt="3级,点击查看等级说明">
+        </a>
+      </div>
+    </div>
+    <div class="gradeAndbadge gradewidths" title="157556">
+        <span>访问量：</span>
+        <span class="num odd-overhidden">15万+</span>
+    </div>
+
+    <div class="gradeAndbadge gradewidths" title="884">
+      <span>积分：</span>
+      <span  class="num odd-overhidden">884</span>
+    </div>
+    <div class="gradeAndbadge gradewidths" title="57221">
+        <span>排名：</span>
+        <span class="num odd-overhidden">5万+</span>
+    </div>
+
+</div>
+<script type="text/javascript">
+  // 判断并设置用户名位置，没有博客专家与关注按钮时，用户名居中
+  $medals_children = $('.medals').children().length;
+  $span_add_follow = $('#span_add_follow').length;
+  if($medals_children === 0 && $span_add_follow === 0){
+    $('.inf_bar dd').css('vertical-align','10px')
+  }
+</script>          <div class="extension_other csdn-tracking-statistics tracking-click" data-mod="popu_389">
+          <!--u3032528-->
+        <div class="flashrecommend">
+                        <script type="text/javascript" src="//cee1.iteye.com/bwocoltly.js"></script>
+                    </div>
+      </div>
+            <div class="writings">
+      <div class="public_signal clearfix">
+        <h3>他的最新文章</h3>
+        <a href="https://blog.csdn.net/a1368783069" target="_blank" class="more"><span>更多文章</span></a>
+      </div>
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/a1368783069/article/details/79414605" target="_blank">自动清理过期mysql从库 log_bin日志</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/a1368783069/article/details/79226713" target="_blank">免密码scp linux</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/a1368783069/article/details/79093877" target="_blank">python 处理请求获取的图片</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/a1368783069/article/details/78990815" target="_blank">go安装</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/a1368783069/article/details/78721796" target="_blank">python Pexpect 实现输密码 scp 拷贝</a>
+            </li>
+                    </ul>
+    </div>
+                <div class="user-hotArticle sort ClassSort">
+            <h3>文章分类</h3>
+            <ul class="hotArticle-list sort-list ClassSort-list">
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/3139603" class="odd-overhidden floatL">python</a>
+                        <div class="read list-left floatR"><span>38篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/3143801" class="odd-overhidden floatL">c#</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/3262307" class="odd-overhidden floatL">Video&amp;Audio</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/5427949" class="odd-overhidden floatL">windows</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/5581083" class="odd-overhidden floatL">Prezi</a>
+                        <div class="read list-left floatR"><span>3篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/5616007" class="odd-overhidden floatL">LaTeX</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/5727639" class="odd-overhidden floatL">爬虫</a>
+                        <div class="read list-left floatR"><span>6篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6138892" class="odd-overhidden floatL">linux</a>
+                        <div class="read list-left floatR"><span>9篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6159859" class="odd-overhidden floatL">Hbase</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6216123" class="odd-overhidden floatL">算法</a>
+                        <div class="read list-left floatR"><span>5篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6219300" class="odd-overhidden floatL">Thinking</a>
+                        <div class="read list-left floatR"><span>2篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6254118" class="odd-overhidden floatL">hadoop</a>
+                        <div class="read list-left floatR"><span>2篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6263011" class="odd-overhidden floatL">mysql</a>
+                        <div class="read list-left floatR"><span>4篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6329996" class="odd-overhidden floatL">NLP</a>
+                        <div class="read list-left floatR"><span>3篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6337175" class="odd-overhidden floatL">Macine Learning</a>
+                        <div class="read list-left floatR"><span>5篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6338042" class="odd-overhidden floatL">可视化</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6376906" class="odd-overhidden floatL">deep learning</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6387533" class="odd-overhidden floatL">spark</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6604167" class="odd-overhidden floatL">搜索</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6708984" class="odd-overhidden floatL">mongodb</a>
+                        <div class="read list-left floatR"><span>2篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/6753865" class="odd-overhidden floatL">c</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/7122952" class="odd-overhidden floatL">git</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/7218246" class="odd-overhidden floatL">c++</a>
+                        <div class="read list-left floatR"><span>2篇</span></div>
+                    </li>
+                                    <li class="clearfix">
+                        <a href="https://blog.csdn.net/a1368783069/article/category/7385854" class="odd-overhidden floatL">go</a>
+                        <div class="read list-left floatR"><span>1篇</span></div>
+                    </li>
+                            </ul>
+            <div class="unfold-btn">
+              <span>展开</span><i class="icon iconfont icon-xiajiantou"></i>
+            </div>
+        </div>
+    <!--    [StartShowSelfColumn]-->
+    <!--    [EndShowSelfColumn]-->
+            <div class="user-hotArticle sort timeSort">
+          <h3>文章存档</h3>
+          <ul class="hotArticle-list timeSort-list">
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2018/03" class="odd-overhidden floatL">2018年3月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2018/02" class="odd-overhidden floatL">2018年2月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2018/01" class="odd-overhidden floatL">2018年1月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/12" class="odd-overhidden floatL">2017年12月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/11" class="odd-overhidden floatL">2017年11月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/10" class="odd-overhidden floatL">2017年10月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/09" class="odd-overhidden floatL">2017年9月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/08" class="odd-overhidden floatL">2017年8月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/07" class="odd-overhidden floatL">2017年7月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/04" class="odd-overhidden floatL">2017年4月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/02" class="odd-overhidden floatL">2017年2月</a>
+                  <div class="read list-left floatR"><span>3篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2017/01" class="odd-overhidden floatL">2017年1月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/12" class="odd-overhidden floatL">2016年12月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/10" class="odd-overhidden floatL">2016年10月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/09" class="odd-overhidden floatL">2016年9月</a>
+                  <div class="read list-left floatR"><span>3篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/08" class="odd-overhidden floatL">2016年8月</a>
+                  <div class="read list-left floatR"><span>10篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/07" class="odd-overhidden floatL">2016年7月</a>
+                  <div class="read list-left floatR"><span>4篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/06" class="odd-overhidden floatL">2016年6月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/05" class="odd-overhidden floatL">2016年5月</a>
+                  <div class="read list-left floatR"><span>7篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/03" class="odd-overhidden floatL">2016年3月</a>
+                  <div class="read list-left floatR"><span>3篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2016/01" class="odd-overhidden floatL">2016年1月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/11" class="odd-overhidden floatL">2015年11月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/09" class="odd-overhidden floatL">2015年9月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/08" class="odd-overhidden floatL">2015年8月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/07" class="odd-overhidden floatL">2015年7月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/06" class="odd-overhidden floatL">2015年6月</a>
+                  <div class="read list-left floatR"><span>5篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/05" class="odd-overhidden floatL">2015年5月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/04" class="odd-overhidden floatL">2015年4月</a>
+                  <div class="read list-left floatR"><span>2篇</span></div>
+                </li>
+                            <li class="clearfix">
+                  <a href="https://blog.csdn.net/a1368783069/article/month/2015/01" class="odd-overhidden floatL">2015年1月</a>
+                  <div class="read list-left floatR"><span>1篇</span></div>
+                </li>
+                      </ul>
+          <div class="unfold-btn">
+            <span>展开</span><i class="icon iconfont icon-xiajiantou"></i>
+          </div>
+        </div>
+            <div class="user-hotArticle">
+        <h3>他的热门文章</h3>
+        <ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+<!--        [StartHotArticles]-->
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/48375695">python网络爬虫抓取动态网页并将数据存入数据库MySQL</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>14825</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/46692803">MiKTeX与Texmaker 配置使用</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>13002</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/52048349">特征选择--scikit-learn</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>12938</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/46891685">python字典多键值及重复键值的使用</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>11480</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/52067404">Graphviz -图形可视化，python实现</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>9112</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/52025764">gensim中使用word2vec</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>7913</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/45932717">Audition去除音频中的人声保留背景音乐</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>7493</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/51558312">QT creator的安装与使用  linux</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>6416</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/50444739">ghost.py 使用实例</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>5433</span></div>
+                </li>
+                            <li>
+                    <a href="https://blog.csdn.net/a1368783069/article/details/52088302">gensim中实践LDA</a>
+                    <div class="read list-left"><i class="icon iconfont icon-read"></i><span>5222</span></div>
+                </li>
+            <!--        [EndHotArticles]-->
+        </ul>
+    </div>
+    
+<!--    [startcustom]-->
+    <!--    [endcustom]-->
+  <div class="fixRight_box" style="height:256px">
+    <div class="fixRight">
+                    <!--u3163270-->
+                        <script type="text/javascript" src="//cee1.iteye.com/avneunkwb.js"></script>
+                          <div class="persion_article"></div>
+    </div>
+  </div>
+</aside>
+</div>
+
+<div class="left_fixed">
+    <div class="left_show_button">
+        <span>
+          <i class="icon iconfont icon-youjiantou"></i>
+        </span>
+    </div>
+    <ul class="left_menu" id="share_box">
+        <li>
+            <button class="left-fixed-btn btn-like csdn-tracking-statistics tracking-click" data-mod="popu_373" target="_self" title="点赞">
+                <a href="javascript:void(0);" class="iconbox border_red" ><i class="icon iconfont icon-dianzan"></i></a>
+                <a class="txt" href="javascript:void(0);">3</a>
+            </button>
+        </li>
+        <li id="blog_artical_directory">
+            <button class="left-fixed-btn left_menu_btn csdn-tracking-statistics tracking-click" data-mod="popu_372" target="_self" title="目录">
+                <a href="javascript:void(0);" class="iconbox border_black" ><i class="icon iconfont icon-mulu"></i></a>
+            </button>
+        </li>
+        <li class="menu_con">
+            <div class="list_father">
+                <div class="arr_box">
+                    <button class="btn-noborder arr-btn scroll-down  left_scroll_down"><i class="icon iconfont icon-xiajiantou"></i></button>
+                    <button class="btn-noborder arr-btn scroll-up left_scroll_top"><i class="icon iconfont icon-shangjiantou"></i></button>
+                </div>
+                <div class="arr"></div>
+                <div id="csdnBlogDir"></div>
+            </div>
+        </li>
+        <!--        <li>-->
+        <!--            <button class="left-fixed-btn btn-like tracking-ad" data-mod="popu_373" target="_self">-->
+        <!--                <span class="iconbox border_red"><i class="icon iconfont icon-xihuan-"></i></span>-->
+        <!--                <span class="txt">喜欢</span>-->
+        <!--                <span class="untxt">取消喜欢</span>-->
+        <!--            </button>-->
+        <!--        </li>-->
+        <li>
+            <button class="left-fixed-btn csdn-tracking-statistics tracking-click" data-mod="popu_374"  id="com-quick-collect" target="_self" title="收藏">
+                <a href="javascript:void(0);" class="iconbox border_purple" ><i class="icon iconfont icon-shoucang"></i></a>
+            </button>
+        </li>
+        <li>
+            <button class="left-fixed-btn btn-pinglun csdn-tracking-statistics tracking-click" data-mod="popu_544" title="评论">
+                <a href="javascript:void(0);" class="iconbox border_purple" ><i class="icon iconfont icon-pinglun"></i></a>
+            </button>
+        </li>
+        <li class="bdsharebuttonbox csdn-tracking-statistics tracking-click" data-mod="popu_172">
+            <a class="bds_tsina outside left-fixed-btn" data-cmd="tsina" title="分享到新浪微博"></a>
+            <span class="iconbox border_red2"><i class="icon iconfont icon-xinlang"></i></span>
+        </li>
+        <li class="bdsharebuttonbox csdn-tracking-statistics tracking-click" data-mod="popu_172">
+            <a class="bds_weixin outside left-fixed-btn" data-cmd="weixin" title="分享到微信"></a>
+            <span class="iconbox border_green"><i class="icon iconfont icon-weixin"></i></span>
+        </li>
+        <li class="bdsharebuttonbox csdn-tracking-statistics tracking-click" data-mod="popu_172">
+            <a class="bds_qzone outside left-fixed-btn" data-cmd="qzone" title="分享到QQ空间"></a>
+            <span class="iconbox border_blue"><i class="icon iconfont icon-QQ"></i></span>
+        </li>
+        <li id="share_box">
+            
+            <div class="bdsharebuttonbox csdn-tracking-statistics tracking-click" data-mod="popu_172">
+                
+                
+                
+            </div>
+        </li>
+    </ul>
+</div>
+<div id="pop_win"></div>
+<div id="popup_mask"></div>
+<div class="pop_CA_cover" ></div>
+<div class="pop pop_CA" >
+    <div class="CA_header">
+        收藏助手
+        <span class="cancel_icon"  id="fapancle" ></span>
+    </div>
+    <iframe src="" id="collectIframe" frameborder="0" width="100%" height="360"  scrolling="no" ></iframe>
+</div>
+<!--举报-->
+<div id="report_dialog" style="top: 250px; left: 343.5px;"><div id="panel_report">
+    <div class="panel_head">不良信息举报</div>
+    <form method="post" id="frmReport" class="panel_body">
+        <table border="0" cellpadding="0" cellspacing="4" class="pop_table">
+            <tbody><tr><td colspan="2">您举报文章：<a href="https://blog.csdn.net/a1368783069/article/details/52048349" target="_blank">特征选择--scikit-learn</a></td></tr>
+            <tr>
+                <th style="width:60px;">举报原因：</th>
+                <td id="panel_reporttype">
+                    <label><input type="radio" class="report_type" id="report_sex" name="report_type" value="1">色情</label>
+                    <label><input type="radio" class="report_type" id="report_Politics" name="report_type" value="2">政治</label>
+                    <label><input type="radio" class="report_type" id="report_copy" name="report_type" value="3">抄袭</label>
+                    <label><input type="radio" class="report_type" id="report_ad" name="report_type" value="4">广告</label>
+                    <label><input type="radio" class="report_type" id="report_want" name="report_type" value="5">招聘</label>
+                    <label><input type="radio" class="report_type" id="report_call" name="report_type" value="6">骂人</label>
+                    <br>
+                    <label><input type="radio" class="report_type" id="report_other" name="report_type" value="7">其他</label>
+                    <input type="text" name="report_other_content" id="report_other_content" maxlength="30" style="display: none;">
+                </td>
+            </tr>
+            <tr id="panel_originalurl" style="display: none;">
+                <th>原文地址：</th>
+                <td>
+                    <input id="originalurl" value="http://" name="originalurl" type="text" style="width: 90%;">
+                </td>
+            </tr>
+            <tr>
+                <th id="sp_reason">原因补充：</th>
+                <td>
+                    <textarea id="report_description" style="width: 300px;" rows="3" name="report_description"></textarea>
+                    <p id="sp_n" style="color:#999;margin:0px;padding:0px;">(最多只允许输入30个字)</p>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input id="btnSubmitReport" name="submit" type="image" align="middle" class="btn_1" src="https://csdnimg.cn/release/phoenix/images/btn_submit.jpg">
+                    <span style="padding-left:20px;"></span>
+                    <img id="btnCloseReportDialog" src="https://csdnimg.cn/release/phoenix/images/btn_cancel.jpg" align="middle">
+                    <div id="error" style="color: Red">
+                    </div>
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>
+    <script language="javascript" type="text/javascript">
+        var isComment=0;
+        //显示隐藏地址
+        $(function () {
+          console.log("version:phoenix");
+            if(isComment){
+                $("#report_description").attr("disabled",true);
+                $("#sp_n").hide();
+                $("#sp_reason").html("评论内容：");
+            }
+            $(".report_type").click(function () {
+                $("#panel_originalurl,#report_other_content").hide();
+                switch ($(this).val()) {
+                    case '3':
+                        $("#panel_originalurl").show();
+                        $("#originalurl").focus();
+                        break;
+                    case '7':
+                        if(isComment){
+                            $("#report_other_content").show().focus();
+                        }
+                        break;
+                }
+
+            });
+
+            $("#frmReport").submit(function () {
+                if (!currentUserName) {
+
+                    if (confirm("您的操作必须登录，是否登录？")) {
+                        location.href = "https://passport.csdn.net/account/login?from=" + encodeURIComponent(location.href);
+                        return false;
+                    }
+                    return false;
+                }
+
+                var reportType = $("input[name=report_type]:checked").val();
+                if(!reportType){
+                    alert("请选择举报原因！");
+                    return false;
+                }
+                var otherInfo = "";
+                switch (reportType) {
+                    case '3':
+                        otherInfo = $("#originalurl").val();
+                        if (otherInfo == ""||otherInfo=="http://") {
+                            alert("举报抄袭必须提供原创文章地址！");
+                            $("#originalurl").focus();
+                            return false;
+                        } else if(!checkeURL(otherInfo)) {
+                            alert("请输入正确的原创文章地址！");
+                            $("#originalurl").focus();
+                            return false;
+                        }
+                        break;
+                    case '7':
+                        otherInfo = $("#report_other_content").val();
+                        if (isComment && !otherInfo) {
+                            alert("请填写举报的具体原因！");
+                            $("#report_other_content").focus();
+                            return false;
+                        }
+                        if(!isComment){
+                            if(!$("#report_description").val()){
+                                alert("请填写举报的具体原因！");
+                                $("#report_description").focus();
+                                return false;
+                            }
+                        }
+                        break;
+                }
+                if(!isComment){
+                    if($("#report_description").val().length>30){
+                        alert("举报原因最多只允许输入30个字！");
+                        return false;
+                    }
+                }
+	            nowTime = {
+		            year: new Date().getFullYear(),
+		            month: parseInt(new Date().getMonth())+1,
+		            day: new Date().getDate(),
+		            hours: parseInt(new Date().getHours())+1,
+		            minutes: parseInt(new Date().getMinutes())+1,
+		            seconds: parseInt(new Date().getSeconds())+1
+	            };
+	            var data = {
+		            articleId: fileName,
+		            commentId: 0,
+		            reportType: reportType,
+		            originalurl: $("#originalurl").val(),
+		            report_other_content: $("#report_other_content").val(),
+		            report_description: $("#report_description").val(),
+		            currentUserName: currentUserName,
+		            updatetime: nowTime.year+'/'+nowTime.month+'/'+nowTime.day+' '+ nowTime.hours+':'+nowTime.minutes+':'+seconds,
+		            blogUser: username
+	            };
+	            if(!isComment){//如果是举报文章
+		            data.report_other_content = data.report_description;
+		            // data.report_description = "1. 神经网络这是一个常见的神经网络的图：这是一个常见的三层神经网络的基本构成，Layer L1是输入层，Layer L2是隐含层";
+	            }
+
+	            $.post(blog_address + "/common/report?id="+fileName+"&t=2", data, function (data) {
+		            if (data.result == 1){
+			            SetError("感谢您的举报，我们会尽快审核！");
+		            }else{
+			            if (data.content) alert(data.content);
+		            }
+
+	            });
+                return false;
+            });
+
+            $("#btnCloseReportDialog").click(function () {
+                CloseDiv();
+            });
+
+        });
+
+        //提示后关闭方法
+        function SetError(error) {
+            $("#btnCloseReportDialog").trigger("click");
+            alert(error);
+            CloseDiv();
+        }
+
+        //关闭方法
+        function CloseDiv() {
+
+            $.removeMask();
+            $("#report_dialog").hide();
+            return false;
+        }
+
+        //验证url
+        function checkeURL(url){
+            return /^http(s)?:\/\/([\w-]+\.)+[\w-]+/i.test(url);
+        }
+    </script>
+</div>
+<!--  fixme 后期清理掉  -->
+<div id="a52b5334d" style="width: 1px; height: 1px; display: none;">
+    <script id="adJs52b5334"></script>
+    <script>document.getElementById("adJs52b5334").src = "https://ads.csdn.net/js/opt/52b5334.js?t=" + Math.random();</script>
+</div>
+<script>
+    $(".MathJax").remove();
+</script>
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script type="text/javascript" src="https://passport.csdn.net/content/loginbox/login.js"></script> -->
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script type="text/javascript" >
+    if($(".article_collect li").length==1){$(".article_collect").hide();}
+    if($(".article_tags li").length==1){$(".article_tags").hide();}
+    $(".edit a").attr("href","https://mp.csdn.net/postedit/"+fileName);
+    $.each($(".edu_li a"),function(){$(this).attr("href",$(this).attr("href").replace("blog7","blog9"))});
+    new CNick('#uid').showNickname();
+
+    if($("#fan").html()=="")
+    {
+	    $("#fan").html(0);
+    }
+</script>
+<script src="https://csdnimg.cn/public/common/append_mark/appendMark.min.js?v=5.00.43" type="text/javascript"></script>
+<script type="text/javascript">
+    appendMark($('.recommend_list').children('a').find('dt'),$('.extension_other'),$('.yd_a_d_feed_cla'))
+</script>
+<script src='https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js?v201802051726' data-isfootertrack="false"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            $.createMask();
+            var r = blog_address + "/common/report?id=" + fileName + "&t=" + 2;
+            if (3 == 2) {
+                var s = n.parentNode.parentNode.parentNode.getAttribute("floor");
+                r += "&floor=" + s
+            }
+            var i = (document.documentElement.clientHeight - 400) / 2 + (document.documentElement.scrollTop || document.body.scrollTop),
+                a = (document.documentElement.clientWidth - 400) / 2;
+
+            $("#report_dialog").load(r).css({
+                //top: i + "px",
+                top: '20%',
+                left: a
+            }).show()
+        }
+    })
+</script>
+<script src="https://dup.baidustatic.com/js/os.js"></script>
+
+<div id="loginWrap"></div>
+<div id="dlMask"></div>
+</body>
