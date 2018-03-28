@@ -18,7 +18,7 @@ class WordCount:
         self.max_length = max_length
         self._word_dict = {}
         self.text = self.preprocess(text)
-        self.count()
+        self.build_words()
 
     @property
     def word_dict(self):
@@ -29,7 +29,7 @@ class WordCount:
         p = '[' + "".join(drop_chars) + ']'
         return re.sub(p, '', text)
 
-    def count(self):
+    def build_words(self):
         """生成候选词，并计数
         """
         new_text = self.text
@@ -47,12 +47,12 @@ class WordCount:
 
 
 class Words:
-    def __init__(self, text, min_support=30, min_ent=3):
+    def __init__(self, text, min_support=30, min_ent=3, min_count=5):
         self.words = WordCount(4, text)
         self.word_dict = self.words.word_dict
         self.min_support = min_support
         self.min_ent = min_ent
-        self.min_count = 10
+        self.min_count = min_count
         
     def cal_freeze(self, word):
         """计算凝固度
@@ -82,6 +82,8 @@ class Words:
         return min(ents)
     
     def gen_word(self):
+        """这边遍历所有的候选词，实际应用时，可以把不存在词库里的候选词挑出来成不成词
+        """
         for word, count in self.word_dict.items():
             if len(word) < 2 or count < self.min_count:
                 continue
