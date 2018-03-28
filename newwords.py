@@ -4,75 +4,69 @@
 @create Time:2018-03-26
 
 @author:Brook
-基于信息熵和凝固度的新词发现算法
-参考链接：http://www.matrix67.com/blog/archives/5044
+基于信息熵和互信息的新词发现算法
+原理参考链接：http://www.matrix67.com/blog/archives/5044
 """
 import re
 from collections import Counter
 import numpy as np
 
 
-class WordCount:
-    def __init__(self, max_length, text):
-        assert isinstance(max_length, int), 'max_length must be int'
+class Words:
+    def __init__(self, text, max_length=4, min_support=30, min_ent=3, min_count=5):
         self.max_length = max_length
-        self._word_dict = {}
+        self.min_support = min_support
+        self.min_ent = min_ent
+        self.min_count = min_count
         self.text = self.preprocess(text)
-        self.build_words()
+        self.wordcount = self._build_words()
 
-    @property
-    def word_dict(self):
-        return dict(self._word_dict)
-    
-    def preprocess(self, text):
+    @staticmethod
+    def preprocess(text):
+        """文本去标点
+        """
         drop_chars = ['=','，', '\s', '\d', '。', '、', '：', '\(', '\)', '\[', '\]', '\.', ',', '”', '“', '？', '?', '！', '‘', '’', '…']
         p = '[' + "".join(drop_chars) + ']'
         return re.sub(p, '', text)
 
-    def build_words(self):
+    def _build_words(self):
         """生成候选词，并计数
         """
-        new_text = self.text
-        self._word_dict = Counter(new_text)
+        print("正在生成候选词...")
+        text = self.text
+        wordcount = Counter(text)
         for length in range(2, self.max_length+1):
             for i in range(length):
-                self._word_dict.update(re.findall(".{%s}" % length, new_text[i:]))
+                wordcount.update(re.findall(".{%s}" % length, text[i:]))
+        return wordcount
 
-    def get_neighbors(self, word):
-        """左右邻词
+    def find_neighbors(self, word):
+        """查找左右邻词
         """
         left = Counter(re.findall("(.)%s" % word, self.text))
         right = Counter(re.findall("%s(.)" % word, self.text))
         return (left, right)
 
-
-class Words:
-    def __init__(self, text, min_support=30, min_ent=3, min_count=5):
-        self.words = WordCount(4, text)
-        self.word_dict = self.words.word_dict
-        self.min_support = min_support
-        self.min_ent = min_ent
-        self.min_count = min_count
-        
-    def cal_freeze(self, word):
-        """计算凝固度
+    def _cal_pmi(self, word):
+        """计算凝固度, 点互信息PMI
         """
         word_len = len(word)
         if word_len == 1:
             return 0
-        word_dict = self.word_dict
-        size = sum(word_dict.values()) # 哪个size, 待确认
-        frzs = []
+        wordcount = self.wordcount
+        size = sum(wordcount.values()) # 哪个size, 待确认
+        #size = len(self.text)
+        pmis = []
         for i in range(1, word_len):
             left_w, right_w = word[:i], word[i:]
-            frz = word_dict[word] * size /(word_dict[left_w] * word_dict[right_w])
-            frzs.append(frz)
-        return min(frzs)
+            pmi = wordcount[word] * size /(wordcount[left_w] * wordcount[right_w])
+            pmis.append(pmi)
+        return min(pmis)
 
-    def cal_entropy(self, word):
+    def _cal_entropy(self, word):
         """计算信息熵
         """
-        neighbors = self.words.get_neighbors(word)
+        neighbors = self.find_neighbors(word)
         ents = []
         for neb in neighbors:
             seq = np.array(list(neb.values()))
@@ -80,21 +74,25 @@ class Words:
             ent = -(p *np.log2(p)).sum()
             ents.append(ent)
         return min(ents)
-    
-    def gen_word(self):
+
+    def generate_words(self, filter_func=None):
         """这边遍历所有的候选词，实际应用时，可以把不存在词库里的候选词挑出来成不成词
         """
-        for word, count in self.word_dict.items():
-            if len(word) < 2 or count < self.min_count:
+        print("正在生成新词...")
+        if filter_func is None:
+            filter_func = lambda x: len(x[0]) > 2 and x[1] > self.min_count
+
+        for word, count in filter(filter_func, self.wordcount.items()):
+            pmi = self._cal_pmi(word)
+            if pmi < self.min_support:
                 continue
-            frz = self.cal_freeze(word)
-            if frz < self.min_support:
-                continue
-            ent = self.cal_entropy(word)
+            ent = self._cal_entropy(word)
             if ent < self.min_ent:
                 continue
-            print("word: %s  count: %s  frz: %s  ent: %s" % (word, count, frz, ent))
+            print("word: %s  count: %s  pmi: %.2f  ent: %.2f" % (word, count, pmi, ent))
             yield word
+
+
             
 
 if __name__ == "__main__":
@@ -104,7 +102,7 @@ if __name__ == "__main__":
         
    
     words = Words(text)
-    for word in words.gen_word():
+    for word in words.generate_words():
         pass
     
     
