@@ -12,8 +12,6 @@ import jieba
 
 class KeyWordTextRank:
     def __init__(self):
-        self.words = defaultdict(set)
-        self.score = {}
         self.max_iter = 200
         self.d = 0.85
         self.min_diff = 0.001
@@ -57,6 +55,7 @@ class KeyWordTextRank:
 
     @staticmethod
     def get_keywords(text, n=10):
+        #切割文本，进一步处理可以考虑消除停用词或其他无意义的词汇
         termlist = [[w for w in jieba.cut(text) if len(w) > 1]]
 
         textrank = KeyWordTextRank()
@@ -67,10 +66,9 @@ class KeyWordTextRank:
 
 
 if __name__ == "__main__":
-    import jieba
     text = "春回大地、万物复苏的美好时节，习近平总书记同首次访问中国的金正恩委员长就发展中朝两党两国关系、维护朝鲜半岛和平稳定进行坦诚友好会谈，并从战略高度提出四点重要主张。这次时机特殊、意义重大的历史性会晤，是中朝传统友好合作关系在新时代得以继承和发展的生动写照，是坚持通过对话协商解决半岛问题的中国方案带来的关键成效，必将有力推动中朝传统友谊在新的历史时期迈上新台阶，为朝鲜半岛局势的进一步转圜注入关键性暖流，对推动地区乃至世界和平稳定发展产生历史性影响。"
     top = KeyWordTextRank.get_keywords(text)
-    print(top[:8])
+    print(top)
 
 
 
