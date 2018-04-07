@@ -80,7 +80,7 @@ class Words:
         """
         print("正在生成新词...")
         if filter_func is None:
-            filter_func = lambda x: len(x[0]) > 2 and x[1] > self.min_count
+            filter_func = lambda x: len(x[0]) >= 2 and x[1] > self.min_count
 
         for word, count in filter(filter_func, self.wordcount.items()):
             pmi = self._cal_pmi(word)
